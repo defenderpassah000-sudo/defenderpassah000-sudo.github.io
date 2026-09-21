@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Eri ❤️ Defend</title>
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;min-height:100vh;overflow:hidden;
+  font-family:Arial,sans-serif;color:#fff;
+  background:radial-gradient(circle at 50% 20%,#ffb6d9,#ff6f9d 45%,#7656d9);
+}
+.screen{
+  position:fixed;inset:0;display:flex;align-items:center;
+  justify-content:center;padding:20px;
+}
+.card{
+  width:min(440px,94vw);min-height:620px;
+  padding:28px 22px;border-radius:32px;text-align:center;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.35);
+  backdrop-filter:blur(20px);
+  box-shadow:0 25px 80px rgba(30,0,50,.3);
+  position:relative;overflow:hidden;
+}
+.hidden{display:none!important}
+
+h1{font-size:34px;margin:10px 0}
+h2{font-size:25px;line-height:1.35;margin:20px 0}
+p{line-height:1.6}
+
+.btn{
+  border:0;border-radius:999px;padding:15px 25px;
+  font-size:17px;font-weight:800;cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+.primary{background:#fff;color:#f04d83}
+.yes{background:#38d982;color:white}
+.no{background:#ff4757;color:white}
+
+.envelope{
+  font-size:105px;cursor:pointer;
+  animation:float 2s ease-in-out infinite;
+}
+@keyframes float{50%{transform:translateY(-14px) rotate(3deg)}}
+
+.panda{font-size:82px;animation:bob 1.5s infinite}
+@keyframes bob{50%{transform:scale(1.08) rotate(2deg)}}
+
+.progress{
+  height:7px;background:rgba(255,255,255,.25);
+  border-radius:20px;overflow:hidden;margin:10px 0 20px;
+}
+.bar{height:100%;width:0;background:#fff;transition:.5s}
+
+.answers{
+  height:180px;position:relative;margin-top:10px;
+}
+.answers button{position:absolute}
+#yes{left:12%;top:55px}
+#no{left:58%;top:55px}
+
+#reaction{
+  min-height:30px;font-weight:800;
+  margin-top:5px;
+}
+
+.badge{
+  display:inline-block;padding:7px 12px;
+  border-radius:20px;background:rgba(0,0,0,.2);
+  font-size:13px;
+}
+
+.heart{
+  position:fixed;bottom:-40px;pointer-events:none;
+  animation:rise linear forwards;z-index:1;
+}
+@keyframes rise{
+  to{transform:translateY(-115vh) rotate(360deg);opacity:0}
+}
+
+.shake{animation:shake .4s}
+@keyframes shake{
+  25%{transform:translateX(-9px)}
+  75%{transform:translateX(9px)}
+}
+
+.pop{animation:pop .5s}
+@keyframes pop{
+  from{transform:scale(.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.flash{
+  position:fixed;inset:0;background:white;
+  pointer-events:none;opacity:0;z-index:50;
+}
+.flash.go{animation:flash .5s}
+@keyframes flash{30%{opacity:.8}}
+
+.finalHeart{
+  font-size:110px;
+  animation:heartbeat 1s infinite;
+}
+@keyframes heartbeat{
+  50%{transform:scale(1.18)}
+}
+
+.small{font-size:13px;opacity:.75}
+
+.choice{
+  display:flex;gap:10px;justify-content:center;
+  margin-top:20px;flex-wrap:wrap;
+}
+</style>
+</head>
+
+<body>
+
+<div class="flash" id="flash"></div>
+
+<div class="screen">
+
+<!-- INTRO -->
+<div class="card" id="intro">
+  <div class="envelope" onclick="openLetter()">💌</div>
+
+  <h1>For Eri ❤️</h1>
+
+  <p>
+    <b>Dear Eri...</b><br>
+    Defend has prepared a very important test.
+  </p>
+
+  <p>There is only one tiny problem...</p>
+
+  <h2>😈 You might not be able to say NO.</h2>
+
+  <button class="btn primary" onclick="openLetter()">
+    OPEN MY LETTER 💌
+  </button>
+
+  <p class="small">⚠️ No refunds after starting.</p>
+</div>
+
+
+<!-- LETTER -->
+<div class="card hidden" id="letter">
+
+  <div class="panda">🐼</div>
+
+  <h1>Hey Eri...</h1>
+
+  <p>
+    Welcome to the <b>Official Eri & Defend Love Test™</b>.
+  </p>
+
+  <p>
+    Answer honestly. ❤️<br>
+    Your answers may be used against you later. 😂
+  </p>
+
+  <button class="btn primary" onclick="startQuiz()">
+    I'M READY 😎
+  </button>
+</div>
+
+
+<!-- QUIZ -->
+<div class="card hidden" id="quiz">
+
+  <span class="badge" id="count">Question 1 / 9</span>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <div class="panda" id="emoji">🥺</div>
+
+  <h2 id="question"></h2>
+
+  <div class="answers" id="answerArea">
+    <button class="btn yes" id="yes" onclick="yesAnswer()">YES ❤️</button>
+    <button class="btn no" id="no">NO ❌</button>
+  </div>
+
+  <div id="reaction"></div>
+
+  <p class="small">
+    🚨 The NO button is currently under investigation.
+  </p>
+</div>
+
+
+<!-- BETWEEN -->
+<div class="card hidden" id="between">
+
+  <div class="panda">👀</div>
+
+  <h1 id="betweenTitle">Interesting...</h1>
+
+  <p id="betweenText"></p>
+
+  <button class="btn primary" onclick="continueQuiz()">
+    NEXT 😈
+  </button>
+</div>
+
+
+<!-- FINAL -->
+<div class="card hidden" id="final">
+
+  <div class="finalHeart">❤️</div>
+
+  <h1>MISSION COMPLETE!</h1>
+
+  <p>
+    Eri has successfully completed the
+    <b>Defend Love Investigation.</b> 😂
+  </p>
+
+  <h2>Verdict: 💘 IN LOVE</h2>
+
+  <p>
+    After extensive scientific research,
+    the results are very clear...
+  </p>
+
+  <h2>Eri ❤️ Defend</h2>
+
+  <p>
+    <b>Eri ba sma ksem? 🥺❤️</b>
+  </p>
+
+  <p class="small">
+    Translation: Eri, do you love me? 😏
+  </p>
+
+  <button class="btn primary" onclick="celebrate()">
+    ACCEPT YOUR FATE 💍😂
+  </button>
+</div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+ q:"You don't love me anymore, right? 👀",
+ e:"🥺",
+ r:"A very dangerous question..."
+},
+
+{
+ q:"You don't miss me when I don't text you, right? 📱",
+ e:"📱",
+ r:"Hmmmm... I don't believe you. 😂"
+},
+
+{
+ q:"You think I'm annoying sometimes, don't you? 😂",
+ e:"😈",
+ r:"Careful... choose wisely. 👀"
+},
+
+{
+ q:"You would be perfectly fine without me, wouldn't you? 💀",
+ e:"😭",
+ r:"That answer could hurt Defend's feelings. 😭"
+},
+
+{
+ q:"You don't think I'm the cutest boyfriend ever, right? 🐼",
+ e:"🐼",
+ r:"The panda is watching your answer. 👀"
+},
+
+{
+ q:"You wouldn't choose me over everyone else, right? ❤️",
+ e:"❤️",
+ r:"Defend is waiting for your answer... 😏"
+},
+
+{
+ q:"You don't want to spend the rest of your life with me, right? 💍",
+ e:"💍",
+ r:"Whoa... this one is serious. 😂"
+},
+
+{
+ q:"So I'm NOT your favorite person, right? 🤨",
+ e:"🤨",
+ r:"There is only one correct answer. 😌"
+},
+
+{
+ q:"Eri ba sma ksem? ❤️",
+ e:"🥰",
+ r:"The FINAL question... no pressure. 😂❤️"
+}
+
+];
+
+let current=0;
+let noEscapes=0;
+
+const intro=document.getElementById("intro");
+const letter=document.getElementById("letter");
+const quiz=document.getElementById("quiz");
+const between=document.getElementById("between");
+const final=document.getElementById("final");
+
+function hideAll(){
+  intro.classList.add("hidden");
+  letter.classList.add("hidden");
+  quiz.classList.add("hidden");
+  between.classList.add("hidden");
+  final.classList.add("hidden");
+}
+
+function openLetter(){
+  hideAll();
+  letter.classList.remove("hidden");
+  letter.classList.add("pop");
+}
+
+function startQuiz(){
+  hideAll();
+  quiz.classList.remove("hidden");
+  current=0;
+  showQuestion();
+}
+
+function showQuestion(){
+
+  const q=questions[current];
+
+  document.getElementById("question").textContent=q.q;
+  document.getElementById("emoji").textContent=q.e;
+  document.getElementById("reaction").textContent=q.r;
+
+  document.getElementById("count").textContent=
+    `Question ${current+1} / ${questions.length}`;
+
+  document.getElementById("bar").style.width=
+    ((current)/questions.length*100)+"%";
+
+  resetNo();
+
+  noEscapes=0;
+}
+
+function yesAnswer(){
+
+  const reactions=[
+    "AHA! 😂❤️ I KNEW IT!",
+    "Caught you! 😏",
+    "That answer has been recorded forever. 😂",
+    "Defend is smiling right now. 😌❤️",
+    "Excellent choice. Your boyfriend approves. 😂",
+    "The Love Court accepts your answer. ⚖️❤️",
+    "Interesting... VERY interesting. 👀",
+    "No turning back now. 😈❤️",
+    "FINAL ANSWER ACCEPTED! 💘"
+  ];
+
+  document.getElementById("reaction").textContent=
+    reactions[current];
+
+  quiz.classList.add("shake");
+
+  burst();
+
+  setTimeout(()=>{
+    quiz.classList.remove("shake");
+
+    if(current===questions.length-1){
+      showFinal();
+    }else{
+      showBetween();
+    }
+  },850);
+}
+
+
+function showBetween(){
+
+  hideAll();
+  between.classList.remove("hidden");
+  between.classList.add("pop");
+
+  const titles=[
+    "Hmmmm... 👀",
+    "Interesting... 😏",
+    "Defend is taking notes... 📝",
+    "The evidence is growing... 😂",
+    "Suspiciously romantic... ❤️",
+    "The investigation continues... 🔎",
+    "We're getting closer... 😈",
+    "ONE MORE! 👀"
+  ];
+
+  const texts=[
+    "Your answer has been added to the official Defend database.",
+    "Don't worry. Your secrets are safe... probably. 😂",
+    "So far, the results are looking VERY interesting.",
+    "The boyfriend court is reviewing your case. ⚖️",
+    "At this point, escaping is becoming impossible. 😭❤️",
+    "Defend has enough evidence to continue the investigation.",
+    "The truth is slowly coming out... 😏",
+    "Ready for the next question?"
+  ];
+
+  document.getElementById("betweenTitle").textContent=titles[current];
+  document.getElementById("betweenText").textContent=texts[current];
+}
+
+function continueQuiz(){
+  current++;
+  hideAll();
+  quiz.classList.remove("hidden");
+  showQuestion();
+}
+
+
+/* RUNNING NO BUTTON */
+
+const no=document.getElementById("no");
+
+function moveNo(){
+
+  noEscapes++;
+
+  const area=document.getElementById("answerArea");
+
+  const maxX=Math.max(
+    5,
+    area.clientWidth-no.offsetWidth-5
+  );
+
+  const maxY=Math.max(
+    5,
+    area.clientHeight-no.offsetHeight-5
+  );
+
+  no.style.left=Math.random()*maxX+"px";
+  no.style.top=Math.random()*maxY+"px";
+
+  no.animate([
+    {transform:"scale(1) rotate(0deg)"},
+    {transform:"scale(1.25) rotate(12deg)"},
+    {transform:"scale(.9) rotate(-12deg)"},
+    {transform:"scale(1) rotate(0deg)"}
+  ],{duration:350});
+
+  const messages=[
+    "NOPE 😂",
+    "TOO SLOW! 🏃‍♂️💨",
+    "HAHA! TRY AGAIN! 😂",
+    "THE NO BUTTON ESCAPED! 🚨",
+    "WHY ARE YOU CHASING ME?! 😭",
+    "NO IS CURRENTLY UNAVAILABLE. 😂",
+    "DEFEND HAS REMOVED THIS OPTION. 😈",
+    "JUST SAY YES ALREADY! ❤️"
+  ];
+
+  document.getElementById("reaction").textContent=
+    messages[Math.min(noEscapes-1,messages.length-1)];
+}
+
+no.addEventListener("mouseenter",moveNo);
+no.addEventListener("touchstart",function(e){
+  e.preventDefault();
+  moveNo();
+});
+no.addEventListener("click",function(e){
+  e.preventDefault();
+  moveNo();
+});
+
+
+function resetNo(){
+
+  no.style.left="58%";
+  no.style.top="55px";
+}
+
+
+/* HEARTS */
+
+function heart(){
+
+  const h=document.createElement("div");
+  h.className="heart";
+
+  const symbols=["❤️","💕","💗","💖","💘","✨","🌸"];
+
+  h.textContent=
+    symbols[Math.floor(Math.random()*symbols.length)];
+
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=(15+Math.random()*28)+"px";
+  h.style.animationDuration=(4+Math.random()*5)+"s";
+
+  document.body.appendChild(h);
+
+  setTimeout(()=>h.remove(),10000);
+}
+
+setInterval(heart,350);
+
+
+/* BURST */
+
+function burst(){
+
+  const flash=document.getElementById("flash");
+
+  flash.classList.remove("go");
+  void flash.offsetWidth;
+  flash.classList.add("go");
+
+  for(let i=0;i<15;i++){
+
+    const h=document.createElement("div");
+
+    h.textContent=["❤️","💖","✨","💕"]
+      [Math.floor(Math.random()*4)];
+
+    h.style.position="fixed";
+    h.style.left="50%";
+    h.style.top="50%";
+    h.style.fontSize="25px";
+    h.style.zIndex="100";
+
+    document.body.appendChild(h);
+
+    const x=(Math.random()-.5)*500;
+    const y=(Math.random()-.5)*500;
+
+    h.animate([
+      {transform:"translate(-50%,-50%) scale(0)",opacity:1},
+      {transform:`translate(${x}px,${y}px) scale(1.5)`,opacity:0}
+    ],{
+      duration:900+Math.random()*500,
+      easing:"ease-out"
+    });
+
+    setTimeout(()=>h.remove(),1600);
+  }
+}
+
+
+/* FINAL CELEBRATION */
+
+function showFinal(){
+
+  hideAll();
+  final.classList.remove("hidden");
+  final.classList.add("pop");
+
+  for(let i=0;i<40;i++){
+    setTimeout(burst,i*40);
+  }
+}
+
+function celebrate(){
+
+  for(let i=0;i<80;i++){
+    setTimeout(burst,i*20);
+  }
+
+  document.querySelector("#final h1").textContent=
+    "ERI ❤️ DEFEND FOREVER!";
+
+  document.querySelector("#final h2").textContent=
+    "THE NO BUTTON HAS LOST. 😂🏆";
+}
+
+</script>
+
+</body>
+</html>
