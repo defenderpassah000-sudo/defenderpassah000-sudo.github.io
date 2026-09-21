@@ -3,454 +3,506 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Eri ❤️ Defender - Secret Love Game</title>
+<title>Eri ❤️ Defender</title>
 
 <style>
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
 }
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#ff758c,#ff7eb3,#c77dff);
-    min-height:100vh;
-    overflow:hidden;
-    color:white;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#ff758c,#ff7eb3,#c77dff);
+ color:white;
+ min-height:100vh;
+ overflow:hidden;
 }
 
 .screen{
-    display:none;
-    width:100%;
-    height:100vh;
-    min-height:100vh;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-    position:relative;
+ display:none;
+ width:100%;
+ height:100vh;
+ min-height:100vh;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ padding:18px;
 }
 
-.screen.active{
-    display:flex;
-}
+.screen.active{display:flex}
 
 .card{
-    width:min(92%,600px);
-    max-height:92vh;
-    overflow:auto;
-    background:rgba(255,255,255,.16);
-    backdrop-filter:blur(14px);
-    border:2px solid rgba(255,255,255,.35);
-    border-radius:30px;
-    padding:28px;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
+ width:min(94%,620px);
+ max-height:94vh;
+ overflow:auto;
+ background:rgba(255,255,255,.16);
+ backdrop-filter:blur(14px);
+ border:2px solid rgba(255,255,255,.35);
+ border-radius:30px;
+ padding:25px;
+ box-shadow:0 20px 60px rgba(0,0,0,.25);
 }
 
 h1{
-    font-size:clamp(30px,8vw,55px);
-    margin:10px 0;
+ font-size:clamp(30px,8vw,55px);
+ margin:10px 0;
 }
 
 h2{
-    font-size:clamp(24px,6vw,38px);
+ font-size:clamp(25px,6vw,38px);
 }
 
 p{
-    font-size:18px;
-    line-height:1.5;
+ font-size:18px;
+ line-height:1.5;
 }
 
 button{
-    border:none;
-    border-radius:50px;
-    padding:15px 25px;
-    margin:8px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-    background:white;
-    color:#e63966;
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
-    transition:.2s;
+ border:0;
+ border-radius:50px;
+ padding:15px 25px;
+ margin:8px;
+ font-size:17px;
+ font-weight:bold;
+ cursor:pointer;
+ background:white;
+ color:#e63966;
+ box-shadow:0 8px 20px rgba(0,0,0,.2);
+ transition:.2s;
 }
 
 button:hover{
-    transform:scale(1.07);
+ transform:scale(1.07);
 }
 
 button:active{
-    transform:scale(.95);
+ transform:scale(.94);
 }
 
 .bigBtn{
-    font-size:21px;
-    padding:18px 35px;
+ font-size:21px;
+ padding:18px 38px;
 }
 
 .panda{
-    font-size:75px;
-    animation:bounce 1.5s infinite;
+ font-size:75px;
+ animation:bounce 1.5s infinite;
 }
 
 @keyframes bounce{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-12px)}
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-12px)}
 }
 
 .floatHeart{
-    position:fixed;
-    bottom:-40px;
-    animation:floatUp linear forwards;
-    pointer-events:none;
-    z-index:0;
+ position:fixed;
+ bottom:-40px;
+ pointer-events:none;
+ animation:floatUp linear forwards;
+ z-index:0;
 }
 
 @keyframes floatUp{
-    to{
-        transform:translateY(-110vh) rotate(360deg);
-        opacity:0;
-    }
+ to{
+  transform:translateY(-110vh) rotate(360deg);
+  opacity:0;
+ }
 }
 
-/* GAME AREA */
 .gameArea{
-    position:relative;
-    width:100%;
-    height:55vh;
-    min-height:320px;
-    margin-top:10px;
-    overflow:hidden;
-    border-radius:25px;
-    background:rgba(0,0,0,.10);
-    border:2px solid rgba(255,255,255,.25);
+ position:relative;
+ width:100%;
+ height:55vh;
+ min-height:300px;
+ overflow:hidden;
+ border-radius:25px;
+ background:rgba(0,0,0,.10);
+ border:2px solid rgba(255,255,255,.25);
+}
+
+.target,
+.letter,
+.broken{
+ position:absolute;
+ cursor:pointer;
+ user-select:none;
 }
 
 .target{
-    position:absolute;
-    font-size:45px;
-    cursor:pointer;
-    user-select:none;
-    animation:pulse .8s infinite alternate;
+ font-size:45px;
+ animation:pulse .8s infinite alternate;
 }
+
+.letter{font-size:44px}
+.broken{font-size:44px}
 
 @keyframes pulse{
-    from{transform:scale(.9)}
-    to{transform:scale(1.12)}
+ from{transform:scale(.9)}
+ to{transform:scale(1.15)}
 }
 
-.score{
-    font-size:21px;
-    font-weight:bold;
-    margin:10px;
-}
-
-.timer{
-    font-size:20px;
-    font-weight:bold;
+.score,.timer{
+ font-size:20px;
+ font-weight:bold;
+ margin:8px;
 }
 
 .question{
-    font-size:clamp(24px,6vw,38px);
-    font-weight:bold;
-    margin:20px 0;
+ font-size:clamp(25px,6vw,40px);
+ font-weight:bold;
+ margin:20px 0;
 }
 
 .options{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-
-.percentBtn{
-    min-width:80px;
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
 }
 
 .message{
-    min-height:35px;
-    font-size:20px;
-    font-weight:bold;
-    margin:10px;
-}
-
-.shake{
-    animation:shake .35s;
-}
-
-@keyframes shake{
-    0%,100%{transform:translateX(0)}
-    20%{transform:translateX(-12px)}
-    40%{transform:translateX(12px)}
-    60%{transform:translateX(-8px)}
-    80%{transform:translateX(8px)}
-}
-
-.letter{
-    position:absolute;
-    font-size:42px;
-    cursor:pointer;
-    user-select:none;
-}
-
-.broken{
-    position:absolute;
-    font-size:43px;
-    cursor:pointer;
-    user-select:none;
+ min-height:40px;
+ font-size:20px;
+ font-weight:bold;
+ margin:10px;
 }
 
 .progress{
-    width:100%;
-    height:12px;
-    background:rgba(255,255,255,.25);
-    border-radius:20px;
-    overflow:hidden;
-    margin:12px 0;
+ width:100%;
+ height:12px;
+ background:rgba(255,255,255,.25);
+ border-radius:20px;
+ overflow:hidden;
+ margin:12px 0;
 }
 
 .progressBar{
-    height:100%;
-    width:0%;
-    background:white;
-    border-radius:20px;
-    transition:.3s;
+ height:100%;
+ width:0;
+ background:white;
+ transition:.3s;
+}
+
+.shake{
+ animation:shake .35s;
+}
+
+@keyframes shake{
+ 0%,100%{transform:translateX(0)}
+ 20%{transform:translateX(-12px)}
+ 40%{transform:translateX(12px)}
+ 60%{transform:translateX(-8px)}
+ 80%{transform:translateX(8px)}
 }
 
 .finalHeart{
-    font-size:90px;
-    animation:heartbeat .8s infinite;
+ font-size:90px;
+ animation:heartbeat .8s infinite;
 }
 
 @keyframes heartbeat{
-    0%,100%{transform:scale(1)}
-    50%{transform:scale(1.25)}
+ 0%,100%{transform:scale(1)}
+ 50%{transform:scale(1.25)}
 }
 
 .finalName{
-    font-size:clamp(35px,10vw,65px);
-    font-weight:bold;
-    text-shadow:0 5px 15px rgba(0,0,0,.2);
+ font-size:clamp(35px,10vw,65px);
+ font-weight:bold;
 }
 
 .small{
-    font-size:14px;
-    opacity:.8;
+ font-size:14px;
+ opacity:.8;
+}
+
+/* RUNAWAY QUESTION */
+.answerArea{
+ position:relative;
+ height:190px;
+ margin-top:10px;
+}
+
+#yesButton{
+ position:absolute;
+ left:20%;
+ top:65px;
+ font-size:21px;
+ z-index:5;
+}
+
+#noButton{
+ position:absolute;
+ left:58%;
+ top:65px;
+ font-size:21px;
+ z-index:6;
+ transition:left .15s ease,top .15s ease,transform .15s ease;
+}
+
+.noMessage{
+ min-height:35px;
+ font-size:20px;
+ font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= START ================= -->
+<!-- START -->
 
 <div id="start" class="screen active">
-    <div class="card">
-        <div class="panda">🐼</div>
+<div class="card">
 
-        <h1>SECRET LOVE GAME 💕</h1>
+<div class="panda">🐼</div>
 
-        <p>
-            Welcome Eri 😌❤️<br>
-            Defender has prepared something very suspicious...
-        </p>
+<h1>SECRET LOVE GAME 💕</h1>
 
-        <p>
-            <b>10 questions + 3 games</b><br>
-            Let's discover how much love is hiding here 👀
-        </p>
+<p>
+Welcome Eri 😌❤️
+</p>
 
-        <button class="bigBtn" onclick="startGame1()">
-            START ❤️
-        </button>
+<p>
+Defender has prepared something very suspicious...
+</p>
 
-        <p class="small">Warning: Escape is impossible 😂</p>
-    </div>
+<p>
+<b>10 questions + 3 games</b>
+</p>
+
+<button class="bigBtn" onclick="startGame1()">
+START ❤️
+</button>
+
+<p class="small">
+Warning: NO escape is not guaranteed 😂
+</p>
+
+</div>
 </div>
 
 
-<!-- ================= GAME 1 ================= -->
+<!-- GAME 1 -->
 
 <div id="game1" class="screen">
-    <div class="card">
-        <h2>GAME 1: CATCH THE HEARTS ❤️</h2>
+<div class="card">
 
-        <p>Catch <b>7 hearts</b> before time runs out!</p>
+<h2>GAME 1: CATCH THE HEARTS ❤️</h2>
 
-        <div class="score">
-            Hearts: <span id="heartScore">0</span> / 7
-        </div>
+<p>Catch <b>7 hearts</b> before time runs out!</p>
 
-        <div class="timer">
-            Time: <span id="game1Timer">15</span>s
-        </div>
+<div class="score">
+Hearts: <span id="heartScore">0</span> / 7
+</div>
 
-        <div class="gameArea" id="heartArea"></div>
-    </div>
+<div class="timer">
+Time: <span id="game1Timer">15</span>s
+</div>
+
+<div class="gameArea" id="heartArea"></div>
+
+</div>
 </div>
 
 
-<!-- ================= QUESTION ================= -->
+<!-- QUESTION 1 SPECIAL -->
+
+<div id="specialQuestion" class="screen">
+<div class="card">
+
+<div class="panda">🐼❤️</div>
+
+<div>Question 1 / 10</div>
+
+<div class="progress">
+<div class="progressBar" style="width:10%"></div>
+</div>
+
+<div class="question">
+Eri ba sma ksem bha? ❤️
+</div>
+
+<p>
+Choose carefully... 👀
+</p>
+
+<div class="answerArea" id="answerArea">
+
+<button id="yesButton" onclick="yesAnswer()">
+YES ❤️
+</button>
+
+<button
+id="noButton"
+onclick="escapeNo(event)"
+onmouseenter="escapeNo(event)"
+ontouchstart="escapeNo(event)">
+NO 😂
+</button>
+
+</div>
+
+<div class="noMessage" id="noMessage"></div>
+
+</div>
+</div>
+
+
+<!-- NORMAL QUESTIONS -->
 
 <div id="question" class="screen">
-    <div class="card">
+<div class="card">
 
-        <div class="panda">🐼❤️</div>
+<div class="panda">🐼❤️</div>
 
-        <div id="questionNumber">
-            Question 1 / 10
-        </div>
+<div id="questionNumber">
+Question 2 / 10
+</div>
 
-        <div class="progress">
-            <div class="progressBar" id="progressBar"></div>
-        </div>
+<div class="progress">
+<div class="progressBar" id="progressBar"></div>
+</div>
 
-        <div class="question" id="questionText"></div>
+<div class="question" id="questionText"></div>
 
-        <div class="options" id="answerOptions"></div>
+<div class="options" id="answerOptions"></div>
 
-        <div class="message" id="questionMessage"></div>
+<div class="message" id="questionMessage"></div>
 
-    </div>
+</div>
 </div>
 
 
-<!-- ================= GAME 2 ================= -->
+<!-- GAME 2 -->
 
 <div id="game2" class="screen">
-    <div class="card">
+<div class="card">
 
-        <h2>GAME 2: CATCH THE LOVE 💌</h2>
+<h2>GAME 2: CATCH THE LOVE 💌</h2>
 
-        <p>
-            Catch <b>8 love letters</b> before the timer ends!
-        </p>
+<p>
+Catch <b>8 love letters</b>!
+</p>
 
-        <div class="score">
-            Letters: <span id="letterScore">0</span> / 8
-        </div>
+<div class="score">
+Letters: <span id="letterScore">0</span> / 8
+</div>
 
-        <div class="timer">
-            Time: <span id="game2Timer">18</span>s
-        </div>
+<div class="timer">
+Time: <span id="game2Timer">18</span>s
+</div>
 
-        <div class="gameArea" id="letterArea"></div>
+<div class="gameArea" id="letterArea"></div>
 
-    </div>
+</div>
 </div>
 
 
-<!-- ================= GAME 3 ================= -->
+<!-- GAME 3 -->
 
 <div id="game3" class="screen">
-    <div class="card">
+<div class="card">
 
-        <h2>GAME 3: PROTECT THE LOVE 💕</h2>
+<h2>GAME 3: PROTECT THE LOVE 💕</h2>
 
-        <p>
-            Tap the ❤️ hearts.<br>
-            <b>DO NOT TAP 💔!</b>
-        </p>
+<p>
+Tap ❤️ hearts.<br>
+<b>DO NOT TAP 💔!</b>
+</p>
 
-        <div class="score">
-            Love saved: <span id="loveScore">0</span> / 10
-        </div>
+<div class="score">
+Love saved: <span id="loveScore">0</span> / 10
+</div>
 
-        <div class="timer">
-            Time: <span id="game3Timer">20</span>s
-        </div>
+<div class="timer">
+Time: <span id="game3Timer">20</span>s
+</div>
 
-        <div class="gameArea" id="protectArea"></div>
+<div class="gameArea" id="protectArea"></div>
 
-    </div>
+</div>
 </div>
 
 
-<!-- ================= FINAL ================= -->
+<!-- FINAL -->
 
 <div id="final" class="screen">
-    <div class="card">
+<div class="card">
 
-        <div class="finalHeart">❤️</div>
+<div class="finalHeart">❤️</div>
 
-        <h1>MISSION COMPLETE! 🎉</h1>
+<h1>MISSION COMPLETE! 🎉</h1>
 
-        <p>
-            Eri survived all the questions...
-        </p>
+<p>
+You survived all 10 questions...
+</p>
 
-        <p>
-            Eri survived all 3 games...
-        </p>
+<p>
+You survived all 3 games...
+</p>
 
-        <p>
-            Which means there is only one conclusion...
-        </p>
+<p>
+And now there is only one thing left...
+</p>
 
-        <div class="finalName">
-            Eri ❤️ Defender
-        </div>
+<div class="finalName">
+Eri ❤️ Defender
+</div>
 
-        <p>
-            Forever & Always 🥰
-        </p>
+<p>
+Forever & Always 🥰♾️
+</p>
 
-        <button onclick="location.reload()">
-            PLAY AGAIN 🔄
-        </button>
+<button onclick="location.reload()">
+PLAY AGAIN 🔄
+</button>
 
-    </div>
+</div>
 </div>
 
 
 <script>
 
-/* ==========================================
-   FLOATING HEARTS
-========================================== */
+/* FLOATING HEARTS */
 
 setInterval(function(){
 
-    const heart=document.createElement("div");
+ const heart=document.createElement("div");
 
-    heart.className="floatHeart";
+ heart.className="floatHeart";
 
-    const hearts=["❤️","💕","💗","💖","💘","💝"];
+ const list=["❤️","💕","💗","💖","💘","💝"];
 
-    heart.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
+ heart.innerHTML=list[Math.floor(Math.random()*list.length)];
 
-    heart.style.left=Math.random()*100+"vw";
+ heart.style.left=Math.random()*100+"vw";
 
-    heart.style.fontSize=(18+Math.random()*30)+"px";
+ heart.style.fontSize=(18+Math.random()*30)+"px";
 
-    heart.style.animationDuration=(4+Math.random()*5)+"s";
+ heart.style.animationDuration=(4+Math.random()*5)+"s";
 
-    document.body.appendChild(heart);
+ document.body.appendChild(heart);
 
-    setTimeout(()=>{
-        heart.remove();
-    },9000);
+ setTimeout(()=>{
+  heart.remove();
+ },9000);
 
 },500);
 
 
-/* ==========================================
-   SCREEN SYSTEM
-========================================== */
+/* SCREEN */
 
 function showScreen(id){
 
-    document.querySelectorAll(".screen")
-    .forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll(".screen")
+ .forEach(s=>s.classList.remove("active"));
 
-    document.getElementById(id)
-    .classList.add("active");
+ document.getElementById(id).classList.add("active");
 }
 
 
-/* ==========================================
-   GAME 1 - CATCH HEARTS
-========================================== */
+/* GAME 1 */
 
 let heartScore=0;
 let game1Time=15;
@@ -459,238 +511,309 @@ let heartSpawner;
 
 function startGame1(){
 
-    heartScore=0;
-    game1Time=15;
+ heartScore=0;
+ game1Time=15;
 
-    document.getElementById("heartScore").innerText=0;
-    document.getElementById("game1Timer").innerText=15;
+ document.getElementById("heartScore").innerText=0;
+ document.getElementById("game1Timer").innerText=15;
+ document.getElementById("heartArea").innerHTML="";
 
-    document.getElementById("heartArea").innerHTML="";
+ showScreen("game1");
 
-    showScreen("game1");
+ clearInterval(game1Interval);
+ clearInterval(heartSpawner);
 
-    clearInterval(game1Interval);
-    clearInterval(heartSpawner);
+ spawnHeart();
 
-    spawnHeart();
+ heartSpawner=setInterval(spawnHeart,850);
 
-    heartSpawner=setInterval(spawnHeart,900);
+ game1Interval=setInterval(function(){
 
-    game1Interval=setInterval(function(){
+  game1Time--;
 
-        game1Time--;
+  document.getElementById("game1Timer").innerText=game1Time;
 
-        document.getElementById("game1Timer").innerText=game1Time;
+  if(game1Time<=0){
 
-        if(game1Time<=0){
+   clearInterval(game1Interval);
+   clearInterval(heartSpawner);
 
-            clearInterval(game1Interval);
-            clearInterval(heartSpawner);
+   if(heartScore>=7){
 
-            if(heartScore>=7){
-                showQuestion(0);
-            }else{
-                alert("Awww 😂 Try again! You need 7 hearts ❤️");
-                startGame1();
-            }
+    showSpecialQuestion();
 
-        }
+   }else{
 
-    },1000);
+    alert("Awww 😂 You need 7 hearts! Try again ❤️");
+
+    startGame1();
+
+   }
+  }
+
+ },1000);
 }
 
 
 function spawnHeart(){
 
-    const area=document.getElementById("heartArea");
+ const area=document.getElementById("heartArea");
 
-    const heart=document.createElement("div");
+ const heart=document.createElement("div");
 
-    heart.className="target";
+ heart.className="target";
+ heart.innerHTML="❤️";
 
-    heart.innerHTML="❤️";
+ heart.style.left=(5+Math.random()*85)+"%";
+ heart.style.top=(5+Math.random()*80)+"%";
 
-    heart.style.left=(5+Math.random()*85)+"%";
+ heart.onclick=function(){
 
-    heart.style.top=(5+Math.random()*80)+"%";
+  heartScore++;
 
-    heart.onclick=function(){
+  document.getElementById("heartScore").innerText=heartScore;
 
-        heartScore++;
+  heart.remove();
 
-        document.getElementById("heartScore").innerText=heartScore;
+  if(heartScore>=7){
 
-        heart.remove();
+   clearInterval(game1Interval);
+   clearInterval(heartSpawner);
 
-        if(heartScore>=7){
+   setTimeout(showSpecialQuestion,400);
+  }
 
-            clearInterval(game1Interval);
-            clearInterval(heartSpawner);
+ };
 
-            setTimeout(()=>{
-                showQuestion(0);
-            },400);
-        }
-    };
+ area.appendChild(heart);
 
-    area.appendChild(heart);
+ setTimeout(()=>{
 
-    setTimeout(()=>{
-        if(heart.parentNode) heart.remove();
-    },1800);
+  if(heart.parentNode) heart.remove();
+
+ },1700);
 }
 
 
-/* ==========================================
-   10 QUESTIONS
-========================================== */
+/* SPECIAL YES / NO QUESTION */
+
+let noAttempts=0;
+
+function showSpecialQuestion(){
+
+ noAttempts=0;
+
+ showScreen("specialQuestion");
+
+ const no=document.getElementById("noButton");
+ const yes=document.getElementById("yesButton");
+
+ no.style.left="58%";
+ no.style.top="65px";
+
+ yes.style.transform="scale(1)";
+
+ document.getElementById("noMessage").innerText="";
+}
+
+
+function escapeNo(event){
+
+ if(event){
+  event.preventDefault();
+ }
+
+ noAttempts++;
+
+ const no=document.getElementById("noButton");
+ const yes=document.getElementById("yesButton");
+ const area=document.getElementById("answerArea");
+
+ const maxX=area.clientWidth-no.offsetWidth-5;
+ const maxY=area.clientHeight-no.offsetHeight-5;
+
+ const x=Math.max(5,Math.random()*maxX);
+ const y=Math.max(5,Math.random()*maxY);
+
+ no.style.left=x+"px";
+ no.style.top=y+"px";
+
+ /* YES grows */
+
+ const size=Math.min(1+noAttempts*.12,2.2);
+
+ yes.style.transform="scale("+size+")";
+
+ const messages=[
+  "Too slow 😂",
+  "Catch me! 🏃💨",
+  "Nope nope nope 😂",
+  "Nice try! 😏",
+  "You can't escape YES ❤️",
+  "HAHA! Missed me! 😂",
+  "Just click YES already! ❤️",
+  "NO button says: BYE 🏃",
+  "Defender programmed me to run 😂",
+  "Okay okay... YES is getting bigger 👀"
+ ];
+
+ document.getElementById("noMessage")
+ .innerText=messages[
+  Math.floor(Math.random()*messages.length)
+ ];
+
+ document.body.classList.remove("shake");
+
+ void document.body.offsetWidth;
+
+ document.body.classList.add("shake");
+
+ setTimeout(()=>{
+  document.body.classList.remove("shake");
+ },350);
+}
+
+
+function yesAnswer(){
+
+ document.getElementById("noMessage")
+ .innerText="I KNEW IT! 😍❤️";
+
+ setTimeout(()=>{
+
+  showQuestion(1);
+
+ },800);
+}
+
+
+/* QUESTIONS 2-10 */
 
 const questions=[
 
 {
-    text:"Eri ba sma ksem bha? ❤️",
-    options:["Maybe 😏","Of course ❤️","I don't know 😂","YES! 💕"]
+ text:"Hadh katno phi ieid ia nga? ❤️",
+ options:["5%","10%","50%","75%","100%","∞% ❤️"]
 },
 
 {
-    text:"Hadh katno phi ieid ia nga? ❤️",
-    options:["5%","10%","50%","75%","100%","∞% ❤️"]
+ text:"Who is your favourite person? 👀❤️",
+ options:["Defender ❤️","My cat 🐱","My pillow 😂","Secret 🤫"]
 },
 
 {
-    text:"Who is your favourite person? 👀",
-    options:["Defender ❤️","My cat 🐱","My pillow 😂","Secret 🤫"]
+ text:"If Defender gives you chocolate, what do you do? 🍫",
+ options:["Eat it 😋","Share half","Hide it 😂","Give hug ❤️"]
 },
 
 {
-    text:"If Defender gives you chocolate, what do you do? 🍫",
-    options:["Eat it 😋","Share half","Hide it 😂","Give hug ❤️"]
+ text:"If we could go anywhere together, where would you go? 🌎",
+ options:["Beach 🏖️","Mountains 🏔️","City 🌃","Anywhere with you ❤️"]
 },
 
 {
-    text:"If we could go anywhere together, what would you choose? 🌎",
-    options:["Beach 🏖️","Mountains 🏔️","City 🌃","Anywhere with you ❤️"]
+ text:"How many hugs does Defender deserve today? 🤗",
+ options:["1","5","10","Unlimited ❤️"]
 },
 
 {
-    text:"How many hugs does Defender deserve today? 🤗",
-    options:["1","5","10","Unlimited ❤️"]
+ text:"If Defender says 'I miss you', what do you say? 🥺",
+ options:["Me too ❤️","Come here 🫂","I miss you more","ALL OF THESE 😍"]
 },
 
 {
-    text:"If Defender says 'I miss you', what is the correct answer? 🥺",
-    options:["Me too ❤️","Come here 🫂","I miss you more","ALL OF THESE 😍"]
+ text:"Who should win the love competition? 🏆",
+ options:["Eri 🥰","Defender 😎","Both ❤️","LOVE ITSELF 😂"]
 },
 
 {
-    text:"Who should win the love competition? 🏆",
-    options:["Eri 🥰","Defender 😎","Both ❤️","LOVE ITSELF 😂"]
+ text:"Would you choose a romantic date with Defender? 🌹",
+ options:["Yes ❤️","YES YES ❤️","Definitely 😍","Already planning it 😂"]
 },
 
 {
-    text:"Would you choose one romantic date with Defender? 🌹",
-    options:["Yes ❤️","YES YES ❤️","Definitely 😍","Already planning it 😂"]
-},
-
-{
-    text:"Final question... Will Eri keep Defender forever? 💍❤️",
-    options:["YES ❤️","100% ❤️","FOREVER ♾️","Obviously 😂"]
+ text:"Final question... Will Eri keep Defender forever? 💍❤️",
+ options:["YES ❤️","100% ❤️","FOREVER ♾️","Obviously 😂"]
 }
 
 ];
 
 let currentQuestion=0;
 
-
-/* ==========================================
-   SHOW QUESTION
-========================================== */
-
 function showQuestion(index){
 
-    currentQuestion=index;
+ currentQuestion=index;
 
-    showScreen("question");
+ showScreen("question");
 
-    const q=questions[index];
+ const q=questions[index];
 
-    document.getElementById("questionNumber")
-    .innerText="Question "+(index+1)+" / 10";
+ document.getElementById("questionNumber")
+ .innerText="Question "+(index+1)+" / 10";
 
-    document.getElementById("questionText")
-    .innerText=q.text;
+ document.getElementById("questionText")
+ .innerText=q.text;
 
-    document.getElementById("progressBar")
-    .style.width=((index+1)/10*100)+"%";
+ document.getElementById("progressBar")
+ .style.width=((index+2)/10*100)+"%";
 
-    document.getElementById("questionMessage")
-    .innerText="";
+ document.getElementById("questionMessage").innerText="";
 
-    const options=document.getElementById("answerOptions");
+ const options=document.getElementById("answerOptions");
 
-    options.innerHTML="";
+ options.innerHTML="";
 
-    q.options.forEach(function(answer){
+ q.options.forEach(function(answer){
 
-        const btn=document.createElement("button");
+  const btn=document.createElement("button");
 
-        btn.innerText=answer;
+  btn.innerText=answer;
 
-        btn.onclick=function(){
+  btn.onclick=function(){
 
-            answerQuestion(answer);
+   answerQuestion();
 
-        };
+  };
 
-        options.appendChild(btn);
+  options.appendChild(btn);
 
-    });
+ });
 }
 
 
-/* ==========================================
-   QUESTION ANSWER
-========================================== */
+function answerQuestion(){
 
-function answerQuestion(answer){
+ const messages=[
+  "Awww ❤️ Defender is smiling!",
+  "Very good answer 😌💕",
+  "Someone is definitely in love 👀❤️",
+  "That answer deserves a hug! 🫂",
+  "Defender approves! 🥰",
+  "My heart just exploded 💥❤️",
+  "Okay Eri... we see you 😂❤️"
+ ];
 
-    const messages=[
-        "Awww ❤️ Defender is smiling!",
-        "Correct answer 😌💕",
-        "Very suspicious... 👀❤️",
-        "Someone is definitely in love 😂",
-        "Defender approves! 🥰",
-        "That answer deserves a hug! 🫂",
-        "My heart just exploded 💥❤️"
-    ];
+ document.getElementById("questionMessage")
+ .innerText=
+ messages[Math.floor(Math.random()*messages.length)];
 
-    document.getElementById("questionMessage")
-    .innerText=
-    messages[Math.floor(Math.random()*messages.length)];
+ setTimeout(()=>{
 
-    document.querySelector(".card").classList.add("shake");
+  if(currentQuestion<8){
 
-    setTimeout(()=>{
+   showQuestion(currentQuestion+1);
 
-        document.querySelector(".card").classList.remove("shake");
+  }else{
 
-        if(currentQuestion<9){
+   setTimeout(startGame2,300);
 
-            showQuestion(currentQuestion+1);
+  }
 
-        }else{
-
-            setTimeout(startGame2,500);
-
-        }
-
-    },900);
+ },700);
 }
 
 
-/* ==========================================
-   GAME 2 - LOVE LETTERS
-========================================== */
+/* GAME 2 */
 
 let letterScore=0;
 let game2Time=18;
@@ -699,98 +822,93 @@ let letterSpawner;
 
 function startGame2(){
 
-    letterScore=0;
-    game2Time=18;
+ letterScore=0;
+ game2Time=18;
 
-    document.getElementById("letterScore").innerText=0;
-    document.getElementById("game2Timer").innerText=18;
+ document.getElementById("letterScore").innerText=0;
+ document.getElementById("game2Timer").innerText=18;
+ document.getElementById("letterArea").innerHTML="";
 
-    document.getElementById("letterArea").innerHTML="";
+ showScreen("game2");
 
-    showScreen("game2");
+ clearInterval(game2Interval);
+ clearInterval(letterSpawner);
 
-    clearInterval(game2Interval);
-    clearInterval(letterSpawner);
+ spawnLetter();
 
-    spawnLetter();
+ letterSpawner=setInterval(spawnLetter,750);
 
-    letterSpawner=setInterval(spawnLetter,750);
+ game2Interval=setInterval(function(){
 
-    game2Interval=setInterval(function(){
+  game2Time--;
 
-        game2Time--;
+  document.getElementById("game2Timer").innerText=game2Time;
 
-        document.getElementById("game2Timer").innerText=game2Time;
+  if(game2Time<=0){
 
-        if(game2Time<=0){
+   clearInterval(game2Interval);
+   clearInterval(letterSpawner);
 
-            clearInterval(game2Interval);
-            clearInterval(letterSpawner);
+   if(letterScore>=8){
 
-            if(letterScore>=8){
+    startGame3();
 
-                setTimeout(startGame3,500);
+   }else{
 
-            }else{
+    alert("You missed too many love letters 😂 Try again!");
 
-                alert("You missed too many love letters 😂 Try again!");
-                startGame2();
+    startGame2();
 
-            }
+   }
+  }
 
-        }
-
-    },1000);
+ },1000);
 }
 
 
 function spawnLetter(){
 
-    const area=document.getElementById("letterArea");
+ const area=document.getElementById("letterArea");
 
-    const letter=document.createElement("div");
+ const letter=document.createElement("div");
 
-    letter.className="letter";
+ letter.className="letter";
 
-    letter.innerHTML=
-        Math.random()>.5 ? "💌" : "💖";
+ letter.innerHTML=Math.random()>.5?"💌":"💖";
 
-    letter.style.left=(5+Math.random()*85)+"%";
+ letter.style.left=(5+Math.random()*85)+"%";
+ letter.style.top=(5+Math.random()*80)+"%";
 
-    letter.style.top=(5+Math.random()*80)+"%";
+ letter.onclick=function(){
 
-    letter.onclick=function(){
+  letterScore++;
 
-        letterScore++;
+  document.getElementById("letterScore").innerText=letterScore;
 
-        document.getElementById("letterScore").innerText=letterScore;
+  letter.remove();
 
-        letter.remove();
+  if(letterScore>=8){
 
-        if(letterScore>=8){
+   clearInterval(game2Interval);
+   clearInterval(letterSpawner);
 
-            clearInterval(game2Interval);
-            clearInterval(letterSpawner);
+   setTimeout(startGame3,400);
 
-            setTimeout(startGame3,500);
+  }
 
-        }
+ };
 
-    };
+ area.appendChild(letter);
 
-    area.appendChild(letter);
+ setTimeout(()=>{
 
-    setTimeout(()=>{
+  if(letter.parentNode) letter.remove();
 
-        if(letter.parentNode) letter.remove();
-
-    },1600);
+ },1600);
 }
 
 
-/* ==========================================
-   GAME 3 - PROTECT THE LOVE
-========================================== */
+/* GAME 3 */
 
 let loveScore=0;
 let game3Time=20;
@@ -799,167 +917,152 @@ let protectSpawner;
 
 function startGame3(){
 
-    loveScore=0;
-    game3Time=20;
+ loveScore=0;
+ game3Time=20;
 
-    document.getElementById("loveScore").innerText=0;
-    document.getElementById("game3Timer").innerText=20;
+ document.getElementById("loveScore").innerText=0;
+ document.getElementById("game3Timer").innerText=20;
+ document.getElementById("protectArea").innerHTML="";
 
-    document.getElementById("protectArea").innerHTML="";
+ showScreen("game3");
 
-    showScreen("game3");
+ clearInterval(game3Interval);
+ clearInterval(protectSpawner);
 
-    clearInterval(game3Interval);
-    clearInterval(protectSpawner);
+ spawnProtectObject();
 
-    spawnProtectObject();
+ protectSpawner=setInterval(spawnProtectObject,650);
 
-    protectSpawner=setInterval(spawnProtectObject,700);
+ game3Interval=setInterval(function(){
 
-    game3Interval=setInterval(function(){
+  game3Time--;
 
-        game3Time--;
+  document.getElementById("game3Timer").innerText=game3Time;
 
-        document.getElementById("game3Timer").innerText=game3Time;
+  if(game3Time<=0){
 
-        if(game3Time<=0){
+   clearInterval(game3Interval);
+   clearInterval(protectSpawner);
 
-            clearInterval(game3Interval);
-            clearInterval(protectSpawner);
+   if(loveScore>=10){
 
-            if(loveScore>=10){
+    showFinal();
 
-                setTimeout(showFinal,500);
+   }else{
 
-            }else{
+    alert("Protect the love better! 😂❤️ Try again!");
 
-                alert("Protect the love better! 😂❤️ Try again!");
-                startGame3();
+    startGame3();
 
-            }
+   }
+  }
 
-        }
-
-    },1000);
+ },1000);
 }
 
 
 function spawnProtectObject(){
 
-    const area=document.getElementById("protectArea");
+ const area=document.getElementById("protectArea");
 
-    const object=document.createElement("div");
+ const object=document.createElement("div");
 
-    const good=Math.random()>.3;
+ const good=Math.random()>.3;
 
-    object.className=good ? "target" : "broken";
+ object.className=good?"target":"broken";
 
-    object.innerHTML=good ? "❤️" : "💔";
+ object.innerHTML=good?"❤️":"💔";
 
-    object.style.left=(5+Math.random()*85)+"%";
+ object.style.left=(5+Math.random()*85)+"%";
+ object.style.top=(5+Math.random()*80)+"%";
 
-    object.style.top=(5+Math.random()*80)+"%";
+ object.onclick=function(){
 
-    object.onclick=function(){
+  if(good){
 
-        if(good){
+   loveScore++;
 
-            loveScore++;
+   document.getElementById("loveScore")
+   .innerText=loveScore;
 
-            document.getElementById("loveScore")
-            .innerText=loveScore;
+   object.remove();
 
-            object.remove();
+   if(loveScore>=10){
 
-            if(loveScore>=10){
+    clearInterval(game3Interval);
+    clearInterval(protectSpawner);
 
-                clearInterval(game3Interval);
-                clearInterval(protectSpawner);
+    setTimeout(showFinal,400);
 
-                setTimeout(showFinal,500);
+   }
 
-            }
+  }else{
 
-        }else{
+   document.body.classList.add("shake");
 
-            document.body.classList.add("shake");
+   setTimeout(()=>{
+    document.body.classList.remove("shake");
+   },350);
 
-            setTimeout(()=>{
-                document.body.classList.remove("shake");
-            },350);
+   object.remove();
 
-            object.remove();
+   alert("HEY! 😱 That was a BROKEN HEART!");
 
-            alert("HEY! 😱 You touched the broken heart!");
+  }
 
-        }
+ };
 
-    };
+ area.appendChild(object);
 
-    area.appendChild(object);
+ setTimeout(()=>{
 
-    setTimeout(()=>{
+  if(object.parentNode) object.remove();
 
-        if(object.parentNode) object.remove();
-
-    },1800);
+ },1700);
 }
 
 
-/* ==========================================
-   FINAL
-========================================== */
+/* FINAL */
 
 function showFinal(){
 
-    showScreen("final");
+ showScreen("final");
 
-    confetti();
+ for(let i=0;i<80;i++){
 
-}
+  setTimeout(()=>{
 
+   const c=document.createElement("div");
 
-/* ==========================================
-   CONFETTI / HEARTS
-========================================== */
+   c.innerHTML=[
+    "❤️","💕","💖","💗","💘","🎉","✨"
+   ][Math.floor(Math.random()*7)];
 
-function confetti(){
+   c.style.position="fixed";
+   c.style.left=Math.random()*100+"vw";
+   c.style.top="-30px";
+   c.style.fontSize=(20+Math.random()*30)+"px";
+   c.style.zIndex="9999";
+   c.style.transition="transform 3s linear,opacity 3s";
 
-    for(let i=0;i<80;i++){
+   document.body.appendChild(c);
 
-        setTimeout(()=>{
+   setTimeout(()=>{
 
-            const c=document.createElement("div");
+    c.style.transform=
+     "translateY(110vh) rotate(720deg)";
 
-            c.innerHTML=
-                ["❤️","💕","💖","💗","🎉","✨","💘"]
-                [Math.floor(Math.random()*7)];
+    c.style.opacity="0";
 
-            c.style.position="fixed";
-            c.style.left=Math.random()*100+"vw";
-            c.style.top="-30px";
-            c.style.fontSize=(20+Math.random()*30)+"px";
-            c.style.zIndex="9999";
-            c.style.transition="transform 3s linear, opacity 3s";
+   },50);
 
-            document.body.appendChild(c);
+   setTimeout(()=>{
+    c.remove();
+   },3200);
 
-            setTimeout(()=>{
+  },i*30);
 
-                c.style.transform=
-                    "translateY(110vh) rotate(720deg)";
-
-                c.style.opacity="0";
-
-            },50);
-
-            setTimeout(()=>{
-                c.remove();
-            },3200);
-
-        },i*35);
-
-    }
+ }
 
 }
 
